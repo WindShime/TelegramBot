@@ -16,14 +16,14 @@ class Message(NamedTuple):
 
 
 class Expense(NamedTuple):
-    # Добавляем в БД новый расход.
+    # Инициализируем расход
     id: Optional[int]
     amount: int
     category_name: str
 
 
 def add_expense(raw_message: str) -> Expense:
-    # Обработка приходящего сообщения от телеграм аккаунта.
+    # Добавление расхода
     parsed_message = _parse_message(raw_message)
     category = Categories().get_category(
         parsed_message.category_text)
@@ -95,18 +95,14 @@ def last() -> List[Expense]:
     return last_expenses
 
 
-def delete_expense(row_id: int) -> None:
-    # Удаление сообщения
-    db.delete("expense", row_id)
-
-
 def _parse_message(raw_message: str) -> Message:
-    # Получаем данные из сообщения о расходе
+    # Обрабатываем полученное сообщение.
+    # Отделяем на сумму, категорию, введенный текст и проверяем корректность ввода.
     regexp_result = re.match(r"([\d ]+) (.*)", raw_message)
     if not regexp_result or not regexp_result.group(0) \
             or not regexp_result.group(1) or not regexp_result.group(2):
         raise exceptions.NotCorrectMessage(
-            "Пожалуйста, введите сообщение по правильному формату"
+            "Пожалуйста, введите сообщение по правильному формату\n"
             "Например:\n300 еда")
 
     amount = regexp_result.group(1).replace(" ", "")
@@ -115,7 +111,7 @@ def _parse_message(raw_message: str) -> Message:
 
 
 def _get_now_formatted() -> str:
-    # Дата
+    # Получение даты
     return _get_now_datetime().strftime("%Y-%m-%d %H:%M:%S")
 
 

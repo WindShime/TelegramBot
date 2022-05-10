@@ -51,7 +51,6 @@ def _init_db():
 
 
 def check_db_exists():
-    """Проверяет, инициализирована ли БД, если нет — инициализирует"""
     # Проверка на инициализацию. Иначе - создание.
     cursor.execute("SELECT name FROM sqlite_master "
                    "WHERE type='table' AND name='expense'")

@@ -4,7 +4,7 @@ import db
 
 
 class Category(NamedTuple):
-    # Категории - типы данных
+    # Инициализация категорий
     codename: str
     name: str
     is_base_expense: bool
@@ -16,7 +16,7 @@ class Categories:
         self._categories = self._load_categories()
 
     def _load_categories(self) -> List[Category]:
-        # Вывод категорий расходов
+        # Выгрузка по каждой категории aliases
         categories = db.fetchall(
             "category", "codename name is_base_expense aliases".split()
         )
